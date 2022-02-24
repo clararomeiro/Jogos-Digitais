@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Animator playeranim;
 
+    private bool canJump;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,9 +42,25 @@ public class PlayerMovement : MonoBehaviour
             playeranim.SetBool("walking", false);
         }
 
-        if (Input.GetButton("Jump"))
+        if (Input.GetButton("Jump") && canJump)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpforce);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Floor"))
+        {
+            canJump = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Floor"))
+        {
+            canJump = false;
         }
     }
 }
